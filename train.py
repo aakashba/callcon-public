@@ -108,10 +108,6 @@ if __name__ == '__main__':
     vmemlimit = args.vmemlimit
     onlyprintsummary = args.onlyprintsummary
     #datfile = args.datfile
-    if args.withbiodats != 'vanilla':
-        withbiodats = True
-        biodatfile = args.withbiodats
-
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = args.tf_loglevel
     os.environ['CUDA_VISIBLE_DEVICES'] = gpu
 

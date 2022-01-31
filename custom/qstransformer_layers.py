@@ -6,6 +6,34 @@ from tensorflow.keras import layers
 
 # The transformer block as a layer
 
+class MultiHeadAttentionBlock(layers.Layer):
+    def __init__(self, embed_dim, num_heads, dropout_rate=0.1, **kwargs):
+        super(MultiHeadAttentionBlock, self).__init__()
+        self.embed_dim = embed_dim
+        self.num_heads = num_heads
+        self.dropout_rate = dropout_rate
+        # self.return_state = return_state
+        self.att = layers.MultiHeadAttention(num_heads=self.num_heads, key_dim=self.embed_dim)
+        self.layernorm = layers.LayerNormalization(epsilon=1e-6)
+        self.dropout = layers.Dropout(self.dropout_rate)
+
+    def call(self, query, value, training, key=None):
+        if key==None:
+            key=value
+        attn_output = self.att(query, value, key)
+        attn_output = self.dropout(attn_output, training=training)
+        out1 = self.layernorm(query+attn_output)
+        return out1
+
+    def get_config(self):
+        config = super().get_config().copy()
+        config.update({
+            'embed_dim': self.embed_dim,
+            'num_heads': self.num_heads,
+        })
+        return config
+
+
 class TransformerBlock(layers.Layer):
     def __init__(self, embed_dim, num_heads, ff_dim, dropout_rate=0.1, return_state=False, **kwargs):
         super(TransformerBlock, self).__init__()
@@ -24,10 +52,13 @@ class TransformerBlock(layers.Layer):
         self.layernorm = layers.LayerNormalization(epsilon=1e-6)
         self.dropout = layers.Dropout(self.dropout_rate)
 
-    def call(self, inputs, training):
-        attn_output = self.att(inputs, inputs)
+    def call(self, query, value, training, key=None):
+        print(training)
+        if key==None:
+            key=value
+        attn_output = self.att(query, value, key)
         attn_output = self.dropout(attn_output, training=training)
-        out1 = self.layernorm(inputs+attn_output)
+        out1 = self.layernorm(query+attn_output)
         ffn_output = self.ffn(out1)
         ffn_output = self.dropout(ffn_output, training=training)
         if self.return_state:
@@ -63,9 +94,6 @@ class TokenAndPositionEmbedding(layers.Layer):
         positions = self.pos_emb(positions)
         x = self.token_emb(x)
         return x+positions
-
-    def compute_output_shape(self, input_shape):
-        return (None,input_shape[1], self.embed_dim)
 
     def get_config(self):
         config = super().get_config().copy()

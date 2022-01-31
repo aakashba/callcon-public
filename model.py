@@ -2,7 +2,7 @@ import tensorflow.keras as keras
 import tensorflow as tf
 
 from models.attendgru import AttentionGRUModel as attendgru
-from models.code2seq import Code2QueModel as code2seq
+from models.code2seq import Code2SeqModel as code2seq
 from models.ast_attendgru_fc import AstAttentionGRUFCModel as ast_attendgru_fc
 from models.codegnngru import CodeGNNGRUModel as codegnngru
 from models.callcon_gru import CallconGRUModel as callcon_gru
