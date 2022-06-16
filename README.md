@@ -1,9 +1,9 @@
 # Guide for replication of results for paper "Function Call Graph Context Encoding for Neural Source Code Summarization" submitted for peer review currently
 ## Step 0 - Dataset building
 
-We provide the compiled dataset as well as the scripts used to compile .The scripts to build call graph are in builders/ folder. The complete data and scripts can also be found at:
+We provide the compiled dataset as well as the scripts used to compile .The scripts to build call graph are in builders/ folder. The complete data and models as well as prediction files can be found at:
 
-https://docs.google.com/uc?export=download&id=1PZovFibsZIca7Jc-8S1mIp6r08fOAxX7
+https://drive.google.com/drive/folders/1jWri2VY69Qm-MIGzsN_TQlPeOgk-Lbpv?usp=sharing
 
 ## Step 1 - Training
 To ensure no recursive errors or edits, create directories callcon/data and clone this git repository and  place the javastmt folders after decompresing the data
